@@ -2,6 +2,7 @@
 console.log('run');
 
 
+
 //functions to load when doc has fully loaded ///////////////////////////////
 $(document).ready(function() {
   console.log('ready');
@@ -208,6 +209,10 @@ console.log("k is " +k);
       $message("You crushed the cockroach and ate it.");
       $(this).css('display','none');
     });
+
+    if (simpleStorage.get('finalScore')) {
+      $('body').append('<p> Your high score is ' + simpleStorage.get('finalScore') + '!')
+    }
 
   Tick();
 

@@ -2,6 +2,7 @@
 console.log('run');
 
 
+
 //functions to load when doc has fully loaded ///////////////////////////////
 $(document).ready(function() {
   console.log('ready');
@@ -13,7 +14,13 @@ $(document).ready(function() {
   var progress = 0;
   var proString;
   var collect = function (item) {
-    $('#message').text("The " + item + " has been moved to your inventory.");
+    $('#message').html('The ' + item + ' has been moved to your inventory. <br/> <span> </span>');
+  };
+
+  var $message = function (text) {
+    console.log('message start');
+    $('footer').find('#message').html(text + '<br/> <span> </span>');
+    console.log('message end');
   };
 
 
@@ -21,9 +28,9 @@ $(document).ready(function() {
   /** Display content in the message div when DOOR is clicked **/
   $('.container').on('click', '#door', function(event) {
     event.preventDefault();
-    // IF ALL KEYS IN INV
-    if (key1 && key2 && key3 && !leave) {
-      $(this).closest('.container').find('#message').text("Phew! You made it. Let's move on (click to leave)");
+    // IF ALL ONLY 1 KEY IN INV (EASY)
+    if ((key1 || key2 || key3) && !leave) {
+      $message("Phew! You made it. Let's move on (click to leave)");
       console.log("key1 " + key1 + ", key2 " + key2 + ", key3 " + key3);
       leave = true;
       progress++;
@@ -33,24 +40,19 @@ $(document).ready(function() {
       console.log('change progress bar');
     }
     //Click again to leave room
-    else if (key1 && key2 && key3 && leave) {
-      window.location.href = 'scene2.html';
-    }
-    // IF ONE OR MORE KEYS IN INV
-    else if (key1 || key2 || key3) {
-      $(this).closest('.container').find('#message').text("The door is only partially unlocked and will not open.");
-      console.log("key1 " + key1 + ", key2 " + key2 + ", key3 " + key3);
+    else if (key1 || key2 || key3 || leave) {
+      window.location.href = 'scene2_easy.html';
     }
     // IF NO KEYS IN INV
     else {
-      $(this).closest('.container').find('#message').text("The door is locked.  Find a way to open it");
+      $message("The door is locked.  Find a way to open it");
       console.log("key1 " + key1 + ", key2 " + key2 + ", key3 " + key3);
     }
   });
 //Double clicking the door does nothing
   $('.container').on('dblclick', '#door', function(event) {
     event.preventDefault();
-    $(this).closest('.container').find('#message').text("Pulling harder won't help.  Find another way.");
+    $message("Pulling harder won't help.  Find another way.");
     console.log('door dbl click end');
   });
 
@@ -64,14 +66,16 @@ $(document).ready(function() {
     $(this).css('display', 'none');
     collect('key');
 
-    var template = "<div class=\"keys\" id=\"key1\"><img src=\"images/key1.png\" alt=\"picture of key one\"></div>";
-    console.log(template);
-    $(this).closest('.container').find('#inv').append(template);
+    template = "<div class=\"keys\"><img src=\"images/key1.png\" alt=\"picture of key five\"></div>";
+    $(this).closest('.container').siblings('footer').find('#inv').append(template);
+    key1inv = true;
     console.log('template placed');
+    console.log('end key1 event');
+    //Increment progress by one
     progress++;
     proString = progress.toString();
     console.log(proString);
-    $(this).closest('.container').children('.bottomWrap').find('progress').val(proString);
+    $(this).closest('.container').siblings('footer').children('.bottomWrap').find('progress').val(proString);
     console.log('change progress bar');
 
   });
@@ -83,14 +87,16 @@ $(document).ready(function() {
     $(this).css('display', 'none');
     collect('key');
 
-    var template = "<div class=\"keys\" id=\"key2\"><img src=\"images/key2.png\" alt=\"picture of key two\"></div>";
-    console.log(template);
-    $(this).closest('.container').find('#inv').append(template);
+    template = "<div class=\"keys\"><img src=\"images/key2.png\" alt=\"picture of key five\"></div>";
+    $(this).closest('.container').siblings('footer').find('#inv').append(template);
+    key2inv = true;
     console.log('template placed');
+    console.log('end key2 event');
+    //Increment progress by one
     progress++;
     proString = progress.toString();
     console.log(proString);
-    $(this).closest('.container').children('.bottomWrap').find('progress').val(proString);
+    $(this).closest('.container').siblings('footer').children('.bottomWrap').find('progress').val(proString);
     console.log('change progress bar');
 
   });
@@ -102,18 +108,19 @@ $(document).ready(function() {
     $(this).css('display', 'none');
     collect('key');
 
-    var template = "<div class=\"keys\" id=\"key3\"><img src=\"images/key3.png\" alt=\"picture of key three\"></div>";
-    console.log(template);
-    $(this).closest('.container').find('#inv').append(template);
+    template = "<div class=\"keys\"><img src=\"images/key3.png\" alt=\"picture of key five\"></div>";
+    $(this).closest('.container').siblings('footer').find('#inv').append(template);
+    key3inv = true;
     console.log('template placed');
+    console.log('end key3 event');
+    //Increment progress by one
     progress++;
     proString = progress.toString();
     console.log(proString);
-    $(this).closest('.container').children('.bottomWrap').find('progress').val(proString);
+    $(this).closest('.container').siblings('footer').children('.bottomWrap').find('progress').val(proString);
     console.log('change progress bar');
 
   });
-
 /////////////////////////////////////////////////////////////////////////////
 
   /** Displaying hidden items **/
@@ -133,7 +140,7 @@ console.log("k is " +k);
     event.preventDefault();
     if (toilet === false) {
       console.log('Congrats, you touched a digital toilet.');
-      $(this).closest('.container').find('#message').text("You put your hand in the toilet. Someone forgot to flush.");
+      $message("You put your hand in the toilet. Someone forgot to flush.");
       $(this).children('.key').fadeIn();
       toilet = true;
     }
@@ -141,7 +148,7 @@ console.log("k is " +k);
       toilet = 3;
     }
     else {
-      $(this).closest('.container').find('#message').text("Stop touching the toilet, that's weird.");
+      $message("Stop touching the toilet, that's weird.");
     }
   });
 
@@ -150,7 +157,7 @@ console.log("k is " +k);
     event.preventDefault();
     if (trash === false) {
       console.log('Sticky');
-      $(this).closest('.container').find('#message').text("Another man's treasure.");
+      $message("Another man's treasure.");
       $(this).children('.key').fadeIn();
       trash = true;
     }
@@ -182,21 +189,27 @@ console.log("k is " +k);
 /////////////////////////////////////////////////////////////CHARLES' SECTION
     $('#mirror').on('click', function(event){
       $(this).css('background-image', 'url(images/mirrror-01.png)'),
-      $(this).closest('.container').find('#message').text("You broke the mirror. Good job.");
+      $message("You broke the mirror. Good job.");
     });
 
     $('#sink').on('click', function(event){
-      $(this).closest('.container').find('#message').text("Will Gallop doesn't wash his hands.")
+      $message("Will Gallop doesn't wash his hands.")
     });
 
     $('.spider').on('click', function(event){
-      $(this).closest('.container').find('#message').text("Leave his home alone.")
+      $message("Leave his home alone.")
     });
 
     $('.roach').on('click', function(event) {
-      $(this).closest('.container').find('#message').text("You crushed the cockroach and ate it.");
+      $message("You crushed the cockroach and ate it.");
       $(this).css('display','none');
     });
+
+    if (simpleStorage.get('finalScore')) {
+      $('body').append('<p> Your high score is ' + simpleStorage.get('finalScore') + '!')
+    }
+
+  Tick();
 
 //END OF READY
 });

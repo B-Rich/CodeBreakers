@@ -17,6 +17,15 @@ var proString;
 var doorClick = false;
 var lights = 'on';
 
+var collect = function (item) {
+  $('#message').html('The ' + item + ' has been moved to your inventory. <br/> <span> </span>');
+};
+var message = function (text) {
+  console.log('message start');
+  $('footer').find('#message').html(text + '<br/> <span> </span>');
+  console.log('message end');
+};
+
 /** RUN ON DOCUMENT READY **/
 $(document).ready(function() {
 
@@ -34,14 +43,12 @@ $(document).ready(function() {
   // var bowl = false;
   // var template = "";
   // var w = true;
-  var message = function(string) {
-    $('body').children('footer').find('#message').text(string);
-  };
+
   var collectSingular = function (item) {
-    $('#message').text("The " + item + " has been moved to your inventory.");
+    $('footer').find('#message').html('The ' + item + ' has been moved to your inventory.<br/> <span> </span>');
   };
   var collectPlural = function (item) {
-    $('#message').text("The " + item + " has been moved to your inventory.");
+    $('footer').find('#message').html('The " + item + " have been moved to your inventory.<br/> <span> </span>');
   };
 
   ///////////////////////////////////////////////////////////////
@@ -59,7 +66,7 @@ $(document).ready(function() {
       message("You're out, thank goodness.  That was getting strange.");
       console.log("key4inv: " + key4 + ", key5inv: " + key5);
 
-      progress++;
+      progress += 50;
       proString = progress.toString();
       console.log(proString);
       $(this).closest('.container').siblings('footer').children('.bottomWrap').find('progress').val(proString);
@@ -68,7 +75,7 @@ $(document).ready(function() {
     //Run if key 5 is in inv and door has been clicked once.
     else if (key5inv && doorClick) {
       console.log('move to scene three');
-      window.location.href = 'scene3.html';
+      window.location.href = 'scene3_easy.html';
     }
     // IF KEY4 (the wrong key) IS IN INVENTORY BUT NOT KEY5
     else if (key4inv) {
@@ -119,7 +126,7 @@ $(document).ready(function() {
     console.log('template placed');
     console.log('end key5 event');
     //Increment progress by one
-    progress++;
+    progress += 50;
     proString = progress.toString();
     console.log(proString);
     $(this).closest('.container').siblings('footer').children('.bottomWrap').find('progress').val(proString);
@@ -195,7 +202,7 @@ $(document).ready(function() {
     //fire is lit but snips is hungry
     else if (snips === true && snipsIs === 'fed' && !key4inv) {
       console.log('snips fed then awake start');
-      message("Woof Ruff Woof Woof *wag* bark! -- translation -- It\'s warm, you fed me, here\'s a key!");
+      message("Woof *wag* bark! translation: It\'s warm, you fed me, here\'s a key!");
       key4 = true;
       template = "<div class=\"keys\" id=\"key4\"><img src=\"images/key4.png\" alt=\"picture of key one\"></div>";
       console.log('template made');
@@ -249,18 +256,18 @@ $(document).ready(function() {
     console.log('bowl events end');
   });
 
-  /** LOCKER EVENTS **/
   $('.container').children('#wall').on('click', '#lockers', function (event) {
     event.preventDefault();
     console.log('lockers start');
+    w = true;
     //IF you do not have the key to the lockers (key4 = false)
-    if (key4 === false) {
-      console.log('key4: ' + key4 + ', key5: ' + key5);
-      message('[LOCKED]');
-      console.log('end mini-locker');
-    }
+    // if (key4 === false) {
+    //   console.log('key4: ' + key4 + ', key5: ' + key5);
+    //   message('[LOCKED]');
+    //   console.log('end mini-locker');
+    // }
     //If you have the keys to the lockers (key4 = true)
-    else if(key4 && key4inv && w) {
+    if(w === true) {
       w = false;
       console.log('key4: ' + key4 + ', key5: ' + key5);
       message('Locker opened.  Better hurry, this is Ansley\'s locker');
@@ -346,4 +353,10 @@ $(document).ready(function() {
     $(this).css('background-image', 'url(images/bowlfull.png)');
   });
 
+
+
+  Tick();
+
 });
+
+/** LOCKER EVENTS **/
