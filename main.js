@@ -1,28 +1,33 @@
 $(document).ready(function(){
 
-$(".name").on("click", function (){
-    console.log("name field was clicked")
+  $(".name").on("change", function (){
+    console.log("Name entered: " + userName);
 
-});
+    var userName = $("#username").val();
+
+    $(this).siblings('.greeting').children('p').text("Hi there " + userName);
+
+  });
+
 
 $("#button").on("click",function (){
 
-  var userName = $(this).closest('fieldset').children('.name').find('#username').text();
+
   var level = $(this).closest('fieldset').children('.levelGroup').find('input').val();
 
   if (level === "easy" ){
-    window.location.href = "scene1_easy.html";
-    console.log("go to easy scene1");
+    // window.location.href = "scene1_easy.html";
+    console.log("easy scene1: " + level);
   }
 
   else if (level === "medium"){
-    window.location.href = "scene1_medium.html";
-    console.log("go to medium scene1");
+    // window.location.href = "scene1_medium.html";
+    console.log("medium scene1: " + level);
   }
 
   else if (level === "hard"){
-    window.location.href = "scene1.html";
-    console.log("go to hard scene1");
+    // window.location.href = "scene1.html";
+    console.log("hard scene1: "+ level);
   }
 
 

@@ -81,3 +81,8 @@ h1{
   color:white;
   padding-top:25px;
 }
+
+.greeting p{
+  color:red;
+  font-size 18px;
+}
